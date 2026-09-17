@@ -81,7 +81,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="legend" parent="domain" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fillColor=#ffffff;strokeColor=#cccccc;rounded=1;spacing=8;" value="QoS legend:&#xa;green  = best-effort, volatile (sensor stream)&#xa;orange = reliable, volatile (commands, no replay)&#xa;blue   = reliable, transient-local (status state)&#xa;purple = reliable, transient-local (telemetry)" vertex="1">
+        <mxCell id="legend" parent="domain" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fillColor=#ffffff;strokeColor=#cccccc;rounded=1;spacing=8;" value="QoS legend:&lt;br&gt;&lt;font color=&quot;#82b366&quot;&gt;green&lt;/font&gt;  = best-effort, volatile (sensor stream)&lt;br&gt;&lt;font color=&quot;#d79b00&quot;&gt;orange&lt;/font&gt; = reliable, volatile (commands, no replay)&lt;br&gt;&lt;font color=&quot;#6c8ebf&quot;&gt;blue&lt;/font&gt;   = reliable, transient-local (status state)&lt;br&gt;&lt;font color=&quot;#9673a6&quot;&gt;purple&lt;/font&gt; = reliable, transient-local (telemetry)" vertex="1">
           <mxGeometry height="110" width="320" x="1140" y="30" as="geometry" />
         </mxCell>
         <mxCell id="t_telemetry" parent="domain" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" value="Robot.TelemetryData" vertex="1">
