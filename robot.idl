@@ -1,0 +1,115 @@
+/*
+ * Robot data model for a simple DDS-based robotic system.
+ *
+ * Four independent, typed data flows:
+ *   - Robot.SensorData      : periodic sensor measurements (control-facing)
+ *   - Robot.ActuatorCommand : discrete commands/events for actuators
+ *   - Robot.ActuatorStatus  : latest actuator state (state data)
+ *   - Robot.TelemetryData   : aggregated snapshot for the monitoring UI
+ */
+
+typedef string<64> EntityId;
+typedef int64 Timestamp; /* Unix-epoch milliseconds */
+
+/* Fixed set of sensor measurement categories. */
+enum SensorKind {
+    TEMPERATURE,
+    PRESSURE,
+    HUMIDITY,
+    VOLTAGE,
+    CURRENT,
+    POSITION,
+    VELOCITY,
+    ACCELERATION,
+    OTHER
+};
+
+/* Fixed set of actuator command operations. */
+enum ActuatorCommandKind {
+    ENABLE,
+    DISABLE,
+    START,
+    STOP,
+    SET_VALUE,
+    RESET,
+    CALIBRATE
+};
+
+/* Operational state reported by an actuator. */
+enum ActuatorState {
+    UNKNOWN,
+    IDLE,
+    ACTIVE,
+    DISABLED,
+    FAULT,
+    CALIBRATING
+};
+
+@top_level
+struct SensorData {
+    /* Key: associates each reading with a stable sensor instance. */
+    @key EntityId sensorId;
+
+    SensorKind kind;
+
+    /* Measured value in the unit identified by unit. */
+    double value;
+
+    /* Engineering unit for value, such as "celsius", "pascal", or "volt". */
+    string<32> unit;
+
+    /* Unix-epoch timestamp, in milliseconds, when the measurement was taken. */
+    Timestamp timestamp;
+};
+
+@top_level
+struct ActuatorCommand {
+    /* Key: identifies the actuator receiving the command. */
+    @key EntityId actuatorId;
+
+    /* Correlates a command with its acknowledgement/status. */
+    uint64 commandId;
+
+    ActuatorCommandKind command;
+
+    /* Parameter used by SET_VALUE and other numeric commands. */
+    double targetValue;
+
+    /* Engineering unit associated with targetValue. */
+    string<32> unit;
+
+    /* Unix-epoch timestamp, in milliseconds, when the command was issued. */
+    Timestamp timestamp;
+};
+
+@top_level
+struct ActuatorStatus {
+    /* Key: matches actuatorId used by ActuatorCommand. */
+    @key EntityId actuatorId;
+
+    ActuatorState state;
+
+    /* Current actuator output or measured position, when applicable. */
+    double currentValue;
+
+    /* Engineering unit associated with currentValue. */
+    string<32> unit;
+
+    /* Nonzero values identify implementation-specific fault conditions. */
+    int32 faultCode;
+
+    /* Unix-epoch timestamp, in milliseconds, when this status was observed. */
+    Timestamp timestamp;
+};
+
+@top_level
+struct TelemetryData {
+    /* Key: defines the DDS instance for this entity's latest snapshot. */
+    @key EntityId entityId;
+
+    /* Sensor measurements collected for this telemetry snapshot. */
+    sequence<SensorData, 256> sensorReadings;
+
+    /* Unix-epoch timestamp, in milliseconds, when the snapshot was assembled. */
+    Timestamp timestamp;
+};
