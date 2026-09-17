@@ -6,15 +6,7 @@ delivery guarantees separate.
 
 ## Architecture
 
-```
-        [Lidar Node] ──publish──┐
-        [IMU Node]   ──publish──┼──> Robot.SensorData ──> [Control/Planning Node]
-                                                        └──> [Telemetry Aggregator]
-        [Control/Planning Node] ──publish──> Robot.ActuatorCommand ──> [Motor Actuator]
-        [Motor Actuator]        ──publish──> Robot.ActuatorStatus  ──> [Control/Planning Node]
-                                                                     └──> [Telemetry Aggregator]
-        [Telemetry Aggregator]  ──publish──> Robot.TelemetryData ──> [Telemetry UI]
-```
+![System architecture](robot_system.svg)
 
 - Sensors publish directly to the controller (short, direct control path).
 - The monitoring UI is kept out of the real-time loop via a telemetry aggregator.
